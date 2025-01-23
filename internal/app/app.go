@@ -3,11 +3,14 @@ package app
 import (
 	"golang-simple-api/internal/delivery"
 	"golang-simple-api/internal/delivery/handler"
+	"golang-simple-api/internal/provider"
 	"golang-simple-api/internal/repository"
 	"golang-simple-api/internal/usecase"
 	"golang-simple-api/pkg/config"
 	"golang-simple-api/pkg/db"
+	"golang-simple-api/pkg/httpclient"
 	"log"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -34,8 +37,14 @@ func (a *App) Start() error {
 	simpleUsecase := usecase.NewSimpleUsecase(simpleRepository)
 	simpleHandler := handler.NewSimpleHandler(simpleUsecase)
 
+	httpClient := httpclient.NewClient(time.Second * 10)
+	pokemonProvider := provider.NewPokemonClient(httpClient, cfg.PokemonAPI)
+	pokemonUsecase := usecase.NewPokemonUsecase(*pokemonProvider)
+	pokemonHandler := handler.NewPokemonHandler(pokemonUsecase)
+
 	app := gin.Default()
-	delivery.RegisterRoutes(app, simpleHandler)
+	delivery.RegisterRoutesPerson(app, simpleHandler)
+	delivery.RegisterRoutesPokemon(app, pokemonHandler)
 
 	return app.Run(":8080")
 }

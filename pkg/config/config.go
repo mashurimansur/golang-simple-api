@@ -8,11 +8,12 @@ import (
 )
 
 type Config struct {
-	Database string
-	Port     string
-	Host     string
-	Username string
-	Password string
+	Database   string
+	Port       string
+	Host       string
+	Username   string
+	Password   string
+	PokemonAPI string
 }
 
 func LoadConfig() *Config {
@@ -22,10 +23,11 @@ func LoadConfig() *Config {
 	}
 
 	return &Config{
-		Database: os.Getenv("DB_DATABASE"),
-		Port:     os.Getenv("DB_PORT"),
-		Host:     os.Getenv("DB_HOST"),
-		Username: os.Getenv("DB_USERNAME"),
-		Password: os.Getenv("DB_PASSWORD"),
+		Database:   os.Getenv("DB_DATABASE"),
+		Port:       os.Getenv("DB_PORT"),
+		Host:       os.Getenv("DB_HOST"),
+		Username:   os.Getenv("DB_USERNAME"),
+		Password:   os.Getenv("DB_PASSWORD"),
+		PokemonAPI: os.Getenv("POKEMON_API"),
 	}
 }
